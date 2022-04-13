@@ -1,0 +1,39 @@
+{
+  "name": "posterr",
+  "version": "1.0.0",
+  "description": "Posterr Social Media",
+  "scripts": {
+    "start": "npm run build && node dist/index.js",
+    "start:dev": "tsnd --respawn --transpile-only --ignore-watch node_modules --no-notify src/main/server.ts",
+    "build": "rimraf dist && tsc",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:unit": "npm test -- --watch -c jest-unit-config.js"
+  },
+  "author": "Flávio Brusamolin",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.4.1",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^17.0.23",
+    "@types/uuid": "^8.3.4",
+    "@typescript-eslint/eslint-plugin": "^5.18.0",
+    "@typescript-eslint/parser": "^5.18.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "jest": "^27.5.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^27.1.4",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.3"
+  },
+  "dependencies": {
+    "express": "^4.17.3",
+    "mongoose": "^6.2.10",
+    "uuid": "^8.3.2"
+  }
+}

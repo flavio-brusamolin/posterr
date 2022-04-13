@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  database:
+    container_name: posterr-db
+    image: mongo:4.4.1
+    restart: always
+    volumes:
+      - mongo:/data/db
+    ports:
+      - 27017:27017
+
+  api:
+    container_name: posterr-api
+    build: .
+    image: posterr-api
+    restart: always
+    environment:
+      - MONGO_URL=mongodb://database:27017/posterr
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - database
+
+volumes:
+  mongo:
