@@ -2,8 +2,7 @@ import { RegularPost } from '../../../../src/domain/entities/regular-post'
 import { PostType } from '../../../../src/domain/enums/post-type'
 import { MaxLengthError } from '../../../../src/domain/errors'
 import { generateRegularPostInput, generateRequiredRegularPostInput } from '../../../support/models'
-
-const generateString = (length: number): string => 'x'.repeat(length)
+import { generateString } from '../../../support/utils'
 
 describe('RegularPost', () => {
   beforeAll(() => {

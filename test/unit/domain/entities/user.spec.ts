@@ -2,8 +2,7 @@ import { RegularPost } from '../../../../src/domain/entities/regular-post'
 import { User } from '../../../../src/domain/entities/user'
 import { AlphanumError, ExistingAssociationError, FollowYourselfError, MaxLengthError, NonExistingAssociationError } from '../../../../src/domain/errors'
 import { generateUserInput, generateRequiredUserInput, generateRegularPostInput } from '../../../support/models'
-
-const generateString = (length: number): string => 'x'.repeat(length)
+import { generateString } from '../../../support/utils'
 
 describe('User', () => {
   beforeAll(() => {
