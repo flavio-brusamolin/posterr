@@ -1,7 +1,7 @@
 import { EventHandler } from '../../domain/events/contracts/event-handler'
 import { PostCreatedEvent } from '../../domain/events/post-created-event'
-import { LoadUserRepository } from '../contracts/load-user-repository'
-import { UpdateUserRepository } from '../contracts/update-user-repository'
+import { LoadUserRepository } from '../contracts/database/user/load-user-repository'
+import { UpdateUserRepository } from '../contracts/database/user/update-user-repository'
 
 export class UpdateUserWhenPostCreatedHandler implements EventHandler<PostCreatedEvent> {
   constructor (

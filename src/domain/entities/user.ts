@@ -1,9 +1,5 @@
 import { Post } from '../aggregates/post'
-import { AlphanumError } from '../errors/alphanum-error'
-import { ExistingAssociationError } from '../errors/existing-association-error'
-import { FollowYourselfError } from '../errors/follow-yourself-error'
-import { MaxLengthError } from '../errors/max-length-error'
-import { NonExistingAssociationError } from '../errors/non-existing-association-error'
+import { AlphanumError, ExistingAssociationError, FollowYourselfError, MaxLengthError, NonExistingAssociationError } from '../errors'
 
 interface UserInput {
   userId: string

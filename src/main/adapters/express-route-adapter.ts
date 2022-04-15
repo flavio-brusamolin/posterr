@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
 import { Controller } from '../../interfaces/http/controllers/controller'
-import { HttpRequest } from '../../interfaces/http/contracts/http-request'
+import { HttpRequest } from '../../interfaces/http/contracts'
 
 export const adaptRoute = (controller: Controller): RequestHandler => {
   return async (req, res) => {

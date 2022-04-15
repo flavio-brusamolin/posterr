@@ -1,6 +1,6 @@
 import { UseCase } from '../../domain/use-cases/use-case'
-import { LoadUserRepository } from '../contracts/load-user-repository'
-import { UserNotRegisteredError } from '../../domain/errors/user-not-registered-error'
+import { LoadUserRepository } from '../contracts/database/user/load-user-repository'
+import { UserNotRegisteredError } from '../../domain/errors'
 
 interface UserSignatureInput {
   userId: string

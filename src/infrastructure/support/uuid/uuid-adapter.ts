@@ -1,4 +1,4 @@
-import { IdentifierGenerator } from '../../../application/contracts/identifier-generator'
+import { IdentifierGenerator } from '../../../application/contracts/support/identifier-generator'
 import { v4 as uuid } from 'uuid'
 
 export class UUIDAdapter implements IdentifierGenerator {

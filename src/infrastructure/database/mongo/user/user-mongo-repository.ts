@@ -1,8 +1,8 @@
 import UserMongoSchema from './user-mongo-schema'
 import UserMongoMapper from './user-mongo-mapper'
 import { User } from '../../../../domain/entities/user'
-import { LoadUserRepository } from '../../../../application/contracts/load-user-repository'
-import { UpdateUserRepository } from '../../../../application/contracts/update-user-repository'
+import { LoadUserRepository } from '../../../../application/contracts/database/user/load-user-repository'
+import { UpdateUserRepository } from '../../../../application/contracts/database/user/update-user-repository'
 
 export class UserMongoRepository implements LoadUserRepository, UpdateUserRepository {
   async loadUser (userId: string): Promise<User> {

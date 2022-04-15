@@ -1,5 +1,5 @@
 import { PostType } from '../enums/post-type'
-import { MaxLengthError } from '../errors/max-length-error'
+import { MaxLengthError } from '../errors'
 
 interface RegularPostInput {
   type?: PostType

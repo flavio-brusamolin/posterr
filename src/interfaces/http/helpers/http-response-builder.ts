@@ -1,7 +1,6 @@
 import { ErrorType } from '../../../domain/enums/error-type'
-import { CustomError } from '../../../domain/errors/custom-error'
-import { ErrorResponse } from '../contracts/error-response'
-import { HttpResponse } from '../contracts/http-response'
+import { CustomError } from '../../../domain/errors/custom/custom-error'
+import { ErrorResponse, HttpResponse } from '../contracts'
 
 export const created = <T>(data: T): HttpResponse<T> => ({
   statusCode: 201,

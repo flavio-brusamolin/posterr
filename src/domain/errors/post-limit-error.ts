@@ -1,4 +1,4 @@
-import { CustomError } from './custom-error'
+import { CustomError } from './custom/custom-error'
 import { ErrorType } from '../enums/error-type'
 
 export class PostLimitError extends CustomError {
