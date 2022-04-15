@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Posterr Social Media",
   "scripts": {
-    "start": "npm run build && node dist/index.js",
+    "start": "npm run build && node dist/main/server.js",
     "start:dev": "tsnd --respawn --transpile-only --ignore-watch node_modules --no-notify src/main/server.ts",
     "build": "rimraf dist && tsc",
     "test": "jest --passWithNoTests --noStackTrace --runInBand",
