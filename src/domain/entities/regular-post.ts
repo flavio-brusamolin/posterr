@@ -1,7 +1,7 @@
 import { PostType } from '../enums/post-type'
 import { MaxLengthError } from '../errors'
 
-interface RegularPostInput {
+export interface RegularPostInput {
   type?: PostType
   postId: string
   userId: string

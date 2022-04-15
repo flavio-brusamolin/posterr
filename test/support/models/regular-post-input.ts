@@ -1,15 +1,23 @@
+import { RegularPostInput } from '../../../src/domain/entities/regular-post'
 import { PostType } from '../../../src/domain/enums/post-type'
+import { UUIDAdapter } from '../../../src/infrastructure/support/uuid/uuid-adapter'
 
-export const regularPostInput = {
+const uuidAdapter = new UUIDAdapter()
+
+export const generateRegularPostInput = (): RegularPostInput => ({
   type: PostType.REGULAR_POST,
-  postId: 'any_post_id',
-  userId: 'any_user_id',
+  postId: uuidAdapter.generateId(),
+  userId: uuidAdapter.generateId(),
   createdAt: new Date(),
   content: 'any_content'
-}
+})
 
-export const requiredRegularPostInput = {
-  postId: regularPostInput.postId,
-  userId: regularPostInput.userId,
-  content: regularPostInput.content
+export const generateRequiredRegularPostInput = (): RegularPostInput => {
+  const regularPostInput = generateRegularPostInput()
+
+  return {
+    postId: regularPostInput.postId,
+    userId: regularPostInput.userId,
+    content: regularPostInput.content
+  }
 }

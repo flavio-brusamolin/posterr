@@ -1,7 +1,7 @@
 import { RegularPost } from './regular-post'
 import { PostType } from '../enums/post-type'
 
-interface RepostInput {
+export interface RepostInput {
   type?: PostType
   postId: string
   userId: string
