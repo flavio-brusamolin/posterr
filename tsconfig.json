@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
-    "rootDir": "src",
+    "rootDirs": ["src", "test"],
     "outDir": "dist",
     "module": "commonjs",
     "target": "es2020",
     "esModuleInterop": true
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }
