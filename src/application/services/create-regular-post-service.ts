@@ -4,12 +4,16 @@ import { CreateRegularPostInput, CreateRegularPostUseCase } from '../../domain/u
 import { CountTodayPostsRepository } from '../contracts/count-today-posts-repository'
 import { CreateRegularPostRepository } from '../contracts/create-regular-post-repository'
 import { IdentifierGenerator } from '../contracts/identifier-generator'
+import { UpdateUserRepository } from '../contracts/update-user-repository'
+import { LoadUserRepository } from '../contracts/load-user-repository'
 
 export class CreateRegularPostService implements CreateRegularPostUseCase {
   constructor (
     private readonly countTodayPostsRepository: CountTodayPostsRepository,
     private readonly identifierGenerator: IdentifierGenerator,
-    private readonly createRegularPostRepository: CreateRegularPostRepository
+    private readonly createRegularPostRepository: CreateRegularPostRepository,
+    private readonly loadUserRepository: LoadUserRepository,
+    private readonly updateUserRepository: UpdateUserRepository
   ) { }
 
   async execute ({ userId, content }: CreateRegularPostInput): Promise<RegularPost> {
@@ -21,6 +25,12 @@ export class CreateRegularPostService implements CreateRegularPostUseCase {
 
     const postId = this.identifierGenerator.generateId()
     const regularPost = new RegularPost({ postId, userId, content })
-    return await this.createRegularPostRepository.createRegularPost(regularPost)
+    const createdRegularPost = await this.createRegularPostRepository.createRegularPost(regularPost)
+
+    const user = await this.loadUserRepository.loadUser(userId)
+    user.incrementNumberOfPosts()
+    await this.updateUserRepository.updateUser(user.getUserId(), user)
+
+    return createdRegularPost
   }
 }

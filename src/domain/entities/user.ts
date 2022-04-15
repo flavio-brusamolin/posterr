@@ -128,6 +128,10 @@ export class User {
     user.removeFollower(this.userId)
   }
 
+  incrementNumberOfPosts (): void {
+    this.numberOfPosts++
+  }
+
   isFollowedBy (userId: string): boolean {
     return this.followers.includes(userId)
   }

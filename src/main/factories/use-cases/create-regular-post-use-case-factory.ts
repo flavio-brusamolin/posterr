@@ -9,6 +9,6 @@ export const makeCreateRegularPostUseCase = (): CreateRegularPostUseCase => {
   const postMongoRepository = new PostMongoRepository()
   const userMongoRepository = new UserMongoRepository()
   const uuidAdapter = new UUIDAdapter()
-  const createRegularPostService = new CreateRegularPostService(postMongoRepository, uuidAdapter, postMongoRepository)
+  const createRegularPostService = new CreateRegularPostService(postMongoRepository, uuidAdapter, postMongoRepository, userMongoRepository, userMongoRepository)
   return new UserSignatureProxy(userMongoRepository, createRegularPostService)
 }
