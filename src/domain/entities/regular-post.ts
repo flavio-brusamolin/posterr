@@ -49,23 +49,7 @@ export class RegularPost {
     this.content = content
   }
 
-  getType (): PostType {
-    return this.type
-  }
-
-  getPostId (): string {
-    return this.postId
-  }
-
   getUserId (): string {
     return this.userId
-  }
-
-  getCreatedAt (): Date {
-    return this.createdAt
-  }
-
-  getContent (): string {
-    return this.content
   }
 }

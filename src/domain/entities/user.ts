@@ -154,35 +154,7 @@ export class User {
     return this.userId
   }
 
-  getUsername (): string {
-    return this.username
-  }
-
-  getJoinedAt (): Date {
-    return this.joinedAt
-  }
-
-  getFollowers (): string[] {
-    return this.followers
-  }
-
   getFollowing (): string[] {
     return this.following
-  }
-
-  getNumberOfFollowers (): number {
-    return this.numberOfFollowers
-  }
-
-  getNumberOfFollowing (): number {
-    return this.numberOfFollowing
-  }
-
-  getNumberOfPosts (): number {
-    return this.numberOfPosts
-  }
-
-  getPostHistory (): Post[] {
-    return this.postHistory
   }
 }

@@ -51,27 +51,7 @@ export class Repost {
     this.comment = comment
   }
 
-  getType (): PostType {
-    return this.type
-  }
-
-  getPostId (): string {
-    return this.postId
-  }
-
   getUserId (): string {
     return this.userId
-  }
-
-  getCreatedAt (): Date {
-    return this.createdAt
-  }
-
-  getOriginalPost (): RegularPost {
-    return this.originalPost
-  }
-
-  getComment (): string {
-    return this.comment
   }
 }
