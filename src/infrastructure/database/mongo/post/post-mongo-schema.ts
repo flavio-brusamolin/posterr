@@ -26,7 +26,7 @@ const RegularPostSchema = {
   }
 }
 
-const PostMongoSchema = new Schema({
+export const PostMongoSchema = new Schema({
   ...RegularPostSchema,
   originalPost: {
     type: new Schema(RegularPostSchema, { _id: false }),

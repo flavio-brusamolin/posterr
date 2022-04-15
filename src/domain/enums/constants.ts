@@ -1,0 +1,3 @@
+const POST_LIMIT_PER_DAY = 5
+
+export { POST_LIMIT_PER_DAY }

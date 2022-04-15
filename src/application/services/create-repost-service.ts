@@ -7,17 +7,16 @@ import { CreateRepostRepository } from '../contracts/create-repost-repository'
 import { IdentifierGenerator } from '../contracts/identifier-generator'
 import { LoadPostRepository } from '../contracts/load-post-repository'
 import { PostNotFoundError } from '../../domain/errors/post-not-found-error'
-import { LoadUserRepository } from '../contracts/load-user-repository'
-import { UpdateUserRepository } from '../contracts/update-user-repository'
+import { EventDispatcher } from '../../domain/events/event-dispatcher'
+import { PostCreatedEvent } from '../../domain/events/post-created-event'
+import { POST_LIMIT_PER_DAY } from '../../domain/enums/constants'
 
 export class CreateRepostService implements CreateRepostUseCase {
   constructor (
     private readonly countTodayPostsRepository: CountTodayPostsRepository,
     private readonly loadPostRepository: LoadPostRepository,
     private readonly identifierGenerator: IdentifierGenerator,
-    private readonly createRepostRepository: CreateRepostRepository,
-    private readonly loadUserRepository: LoadUserRepository,
-    private readonly updateUserRepository: UpdateUserRepository
+    private readonly createRepostRepository: CreateRepostRepository
   ) { }
 
   async execute ({ userId, originalPostId, comment }: CreateRepostInput): Promise<Repost> {
@@ -25,12 +24,10 @@ export class CreateRepostService implements CreateRepostUseCase {
     if (!originalPost) {
       throw new PostNotFoundError()
     }
-
     if (originalPost instanceof Repost) {
       throw new RepostChainError()
     }
 
-    const POST_LIMIT_PER_DAY = 5
     const numberOfTodayPosts = await this.countTodayPostsRepository.countTodayPosts(userId)
     if (numberOfTodayPosts >= POST_LIMIT_PER_DAY) {
       throw new PostLimitError()
@@ -40,9 +37,7 @@ export class CreateRepostService implements CreateRepostUseCase {
     const repost = new Repost({ postId, userId, originalPost, comment })
     const createdRepost = await this.createRepostRepository.createRepost(repost)
 
-    const user = await this.loadUserRepository.loadUser(userId)
-    user.incrementNumberOfPosts()
-    await this.updateUserRepository.updateUser(user.getUserId(), user)
+    EventDispatcher.fire(new PostCreatedEvent(createdRepost))
 
     return createdRepost
   }

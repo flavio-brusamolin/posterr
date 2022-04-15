@@ -1,5 +1,6 @@
 import { Schema, model } from 'mongoose'
 import { UserMongo } from './user-mongo-entity'
+import { PostMongoSchema } from '../post/post-mongo-schema'
 
 const UserMongoSchema = new Schema({
   userId: {
@@ -32,6 +33,10 @@ const UserMongoSchema = new Schema({
   },
   numberOfPosts: {
     type: Number,
+    required: true
+  },
+  postHistory: {
+    type: [PostMongoSchema],
     required: true
   }
 })

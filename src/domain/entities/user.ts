@@ -1,3 +1,4 @@
+import { Post } from '../aggregates/post'
 import { AlphanumError } from '../errors/alphanum-error'
 import { ExistingAssociationError } from '../errors/existing-association-error'
 import { FollowYourselfError } from '../errors/follow-yourself-error'
@@ -13,6 +14,7 @@ interface UserInput {
   numberOfFollowers?: number
   numberOfFollowing?: number
   numberOfPosts?: number
+  postHistory?: Post[]
 }
 
 export class User {
@@ -24,8 +26,9 @@ export class User {
   private numberOfFollowers: number
   private numberOfFollowing: number
   private numberOfPosts: number
+  private postHistory: Post[]
 
-  constructor ({ userId, username, joinedAt, followers, following, numberOfFollowers, numberOfFollowing, numberOfPosts }: UserInput) {
+  constructor ({ userId, username, joinedAt, followers, following, numberOfFollowers, numberOfFollowing, numberOfPosts, postHistory }: UserInput) {
     this.setUserId(userId)
     this.setUsername(username)
     this.setJoinedAt(joinedAt)
@@ -34,6 +37,7 @@ export class User {
     this.setNumberOfFollowers(numberOfFollowers)
     this.setNumberOfFollowing(numberOfFollowing)
     this.setNumberOfPosts(numberOfPosts)
+    this.setPostHistory(postHistory)
   }
 
   private setUserId (userId: string): void {
@@ -76,6 +80,10 @@ export class User {
 
   private setNumberOfPosts (numberOfPosts?: number): void {
     this.numberOfPosts = numberOfPosts ?? 0
+  }
+
+  private setPostHistory (postHistory?: Post[]): void {
+    this.postHistory = postHistory ?? []
   }
 
   private addFollowing (userId: string): void {
@@ -128,7 +136,13 @@ export class User {
     user.removeFollower(this.userId)
   }
 
-  incrementNumberOfPosts (): void {
+  updatePostHistory (post: Post): void {
+    const MAX_HISTORY_SIZE = 5
+    if (this.postHistory.length === MAX_HISTORY_SIZE) {
+      this.postHistory.pop()
+    }
+
+    this.postHistory.unshift(post)
     this.numberOfPosts++
   }
 
@@ -166,5 +180,9 @@ export class User {
 
   getNumberOfPosts (): number {
     return this.numberOfPosts
+  }
+
+  getPostHistory (): Post[] {
+    return this.postHistory
   }
 }

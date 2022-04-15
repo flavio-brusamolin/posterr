@@ -1,4 +1,5 @@
 import { Document } from 'mongoose'
+import { PostMongo } from '../post/post-mongo-entity'
 
 export interface UserMongo extends Document {
   userId: string
@@ -9,4 +10,5 @@ export interface UserMongo extends Document {
   numberOfFollowers: number
   numberOfFollowing: number
   numberOfPosts: number
+  postHistory: PostMongo[]
 }

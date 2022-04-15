@@ -4,20 +4,18 @@ import { CreateRegularPostInput, CreateRegularPostUseCase } from '../../domain/u
 import { CountTodayPostsRepository } from '../contracts/count-today-posts-repository'
 import { CreateRegularPostRepository } from '../contracts/create-regular-post-repository'
 import { IdentifierGenerator } from '../contracts/identifier-generator'
-import { UpdateUserRepository } from '../contracts/update-user-repository'
-import { LoadUserRepository } from '../contracts/load-user-repository'
+import { PostCreatedEvent } from '../../domain/events/post-created-event'
+import { EventDispatcher } from '../../domain/events/event-dispatcher'
+import { POST_LIMIT_PER_DAY } from '../../domain/enums/constants'
 
 export class CreateRegularPostService implements CreateRegularPostUseCase {
   constructor (
     private readonly countTodayPostsRepository: CountTodayPostsRepository,
     private readonly identifierGenerator: IdentifierGenerator,
-    private readonly createRegularPostRepository: CreateRegularPostRepository,
-    private readonly loadUserRepository: LoadUserRepository,
-    private readonly updateUserRepository: UpdateUserRepository
+    private readonly createRegularPostRepository: CreateRegularPostRepository
   ) { }
 
   async execute ({ userId, content }: CreateRegularPostInput): Promise<RegularPost> {
-    const POST_LIMIT_PER_DAY = 5
     const numberOfTodayPosts = await this.countTodayPostsRepository.countTodayPosts(userId)
     if (numberOfTodayPosts >= POST_LIMIT_PER_DAY) {
       throw new PostLimitError()
@@ -27,9 +25,7 @@ export class CreateRegularPostService implements CreateRegularPostUseCase {
     const regularPost = new RegularPost({ postId, userId, content })
     const createdRegularPost = await this.createRegularPostRepository.createRegularPost(regularPost)
 
-    const user = await this.loadUserRepository.loadUser(userId)
-    user.incrementNumberOfPosts()
-    await this.updateUserRepository.updateUser(user.getUserId(), user)
+    EventDispatcher.fire(new PostCreatedEvent(createdRegularPost))
 
     return createdRegularPost
   }

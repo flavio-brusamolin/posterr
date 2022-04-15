@@ -1,5 +1,6 @@
 import express from 'express'
 import env from './config/env'
+import setupEventHandlers from './config/event-handlers'
 import setupMiddlewares from './config/middlewares'
 import setupRoutes from './config/routes'
 import MongoHelper from '../infrastructure/database/mongo/helpers/mongo-helper'
@@ -12,6 +13,7 @@ class Server {
   private initApplication (): void {
     const app = express()
 
+    setupEventHandlers()
     setupMiddlewares(app)
     setupRoutes(app)
 
