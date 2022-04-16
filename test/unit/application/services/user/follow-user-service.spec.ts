@@ -7,6 +7,10 @@ import { generateUserInput } from '../../../../support/models'
 
 let fakeCurrentUser: User
 let fakeTargetUser: User
+const setupUsers = () => {
+  fakeCurrentUser = new User(generateUserInput())
+  fakeTargetUser = new User(generateUserInput())
+}
 
 const makeFakeInput = () => ({
   userId: 'any_user_id',
@@ -17,11 +21,9 @@ const makeLoadUserRepository = (): LoadUserRepository => {
   class LoadUserRepositoryStub implements LoadUserRepository {
     async loadUser (userId: string): Promise<User> {
       if (userId === 'any_user_id') {
-        fakeCurrentUser = new User(generateUserInput())
         return fakeCurrentUser
       }
 
-      fakeTargetUser = new User(generateUserInput())
       return fakeTargetUser
     }
   }
@@ -46,6 +48,8 @@ interface SutTypes {
 }
 
 const makeSut = (): SutTypes => {
+  setupUsers()
+
   const loadUserRepositoryStub = makeLoadUserRepository()
   const updateUserRepositoryStub = makeUpdateUserRepository()
 
