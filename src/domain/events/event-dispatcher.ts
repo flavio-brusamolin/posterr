@@ -25,4 +25,8 @@ export class EventDispatcher {
       }
     }
   }
+
+  static getHandlers (): Handlers {
+    return this.handlers
+  }
 }
