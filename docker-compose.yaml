@@ -22,6 +22,7 @@ services:
       - MONGO_URL=mongodb://database:27017/posterr
     volumes:
       - .:/usr/src/app
+      - /usr/src/app/node_modules
     ports:
       - 8080:8080
     depends_on:
