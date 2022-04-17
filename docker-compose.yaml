@@ -5,8 +5,11 @@ services:
     container_name: posterr-db
     image: mongo:4.4.1
     restart: always
+    environment: 
+      - MONGO_INITDB_DATABASE=posterr
     volumes:
       - mongo:/data/db
+      - ./scripts/init-database.js:/docker-entrypoint-initdb.d/init-database.js:ro
     ports:
       - 27017:27017
 

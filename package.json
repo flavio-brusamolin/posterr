@@ -6,8 +6,8 @@
     "start": "npm run build && node dist/main/server.js",
     "start:dev": "tsnd --respawn --transpile-only --ignore-watch node_modules --no-notify src/main/server.ts",
     "build": "rimraf dist && tsc",
-    "test": "jest --passWithNoTests --noStackTrace --runInBand",
-    "test:unit": "npm test -- --watch -c jest-unit-config.js",
+    "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
+    "test:unit": "npm test -c jest-unit-config.js",
     "test:coverage": "npm test -- --coverage"
   },
   "author": "Flávio Brusamolin",
