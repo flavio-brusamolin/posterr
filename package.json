@@ -8,7 +8,8 @@
     "build": "rimraf dist && tsc",
     "test": "jest --passWithNoTests --silent --noStackTrace --runInBand",
     "test:unit": "npm test -c jest-unit-config.js",
-    "test:coverage": "npm test -- --coverage"
+    "test:coverage": "npm test -- --coverage",
+    "test:integration": "newman run test/integration/posterr.postman_collection.json -e test/integration/env-posterr.postman_environment.json"
   },
   "author": "Flávio Brusamolin",
   "license": "ISC",
@@ -27,6 +28,7 @@
     "eslint-plugin-promise": "^5.2.0",
     "eslint-plugin-standard": "^5.0.0",
     "jest": "^27.5.1",
+    "newman": "^5.3.2",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.1.4",
     "ts-node-dev": "^1.1.8",
