@@ -44,7 +44,7 @@ const makeUpdateUserRepository = (): UpdateUserRepository => {
 
 interface SutTypes {
   unfollowUserService: UnfollowUserService
-  loadUserRepositoryStub: LoadUserRepository,
+  loadUserRepositoryStub: LoadUserRepository
   updateUserRepositoryStub: UpdateUserRepository
 }
 
