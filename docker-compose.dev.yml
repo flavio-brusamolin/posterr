@@ -15,7 +15,9 @@ services:
 
   api:
     container_name: posterr-api
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     image: posterr-api
     restart: always
     environment:
