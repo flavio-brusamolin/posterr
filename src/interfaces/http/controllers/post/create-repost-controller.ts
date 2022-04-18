@@ -1,7 +1,7 @@
 import { Repost } from '../../../../domain/entities/repost'
 import { CreateRepostUseCase } from '../../../../domain/use-cases/post/create-repost-use-case'
 import { Controller } from '../controller'
-import { ErrorResponse, HttpRequest, HttpResponse, SignatureHeader } from '../../contracts'
+import { ErrorResponse, HttpRequest, HttpResponse, SignatureHeader, Validator } from '../../contracts'
 import { created, error } from '../../helpers/http-response-builder'
 
 type RequestParams = { postId: string }
@@ -9,13 +9,18 @@ type RequestBody = { comment?: string }
 type ResponseBody = Repost | ErrorResponse
 
 export class CreateRepostController implements Controller {
-  constructor (private readonly createRepostUseCase: CreateRepostUseCase) { }
+  constructor (
+    private readonly validator: Validator,
+    private readonly createRepostUseCase: CreateRepostUseCase
+  ) { }
 
-  async handle ({ body, headers, params }: HttpRequest<RequestBody, SignatureHeader, RequestParams>): Promise<HttpResponse<ResponseBody>> {
+  async handle (httpRequest: HttpRequest<RequestBody, SignatureHeader, RequestParams>): Promise<HttpResponse<ResponseBody>> {
     try {
-      const { 'user-id': userId } = headers
-      const { postId: originalPostId } = params
-      const { comment } = body
+      this.validator.validate(httpRequest)
+
+      const { 'user-id': userId } = httpRequest.headers
+      const { postId: originalPostId } = httpRequest.params
+      const { comment } = httpRequest.body
 
       const repost = await this.createRepostUseCase.execute({ userId, originalPostId, comment })
 

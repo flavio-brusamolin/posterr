@@ -1,6 +1,7 @@
 import { Repost } from '../../../../../../src/domain/entities/repost'
 import { PostLimitError } from '../../../../../../src/domain/errors'
 import { CreateRepostInput, CreateRepostUseCase } from '../../../../../../src/domain/use-cases/post/create-repost-use-case'
+import { Validator } from '../../../../../../src/interfaces/http/contracts'
 import { CreateRepostController } from '../../../../../../src/interfaces/http/controllers/post/create-repost-controller'
 import { created, error } from '../../../../../../src/interfaces/http/helpers/http-response-builder'
 import { generateRepostInput } from '../../../../../support/models'
@@ -12,6 +13,16 @@ const makeFakeRequest = () => ({
   params: { postId: 'any_post_id' },
   body: { comment: 'any_comment' }
 })
+
+const makeValidator = (): Validator => {
+  class ValidatorStub implements Validator {
+    validate (_input: any): void {
+      // do nothing
+    }
+  }
+
+  return new ValidatorStub()
+}
 
 const makeCreateRepostUseCase = (): CreateRepostUseCase => {
   class CreateRepostUseCaseStub implements CreateRepostUseCase {
@@ -25,22 +36,35 @@ const makeCreateRepostUseCase = (): CreateRepostUseCase => {
 
 interface SutTypes {
   createRepostController: CreateRepostController
+  validatorStub: Validator
   createRepostUseCaseStub: CreateRepostUseCase
 }
 
 const makeSut = (): SutTypes => {
+  const validatorStub = makeValidator()
   const createRepostUseCaseStub = makeCreateRepostUseCase()
 
-  const createRepostController = new CreateRepostController(createRepostUseCaseStub)
+  const createRepostController = new CreateRepostController(validatorStub, createRepostUseCaseStub)
 
   return {
     createRepostController,
+    validatorStub,
     createRepostUseCaseStub
   }
 }
 
 describe('CreateRepostController', () => {
   describe('#handle', () => {
+    it('should call Validator with correct values', async () => {
+      const { createRepostController, validatorStub } = makeSut()
+      const validateSpy = jest.spyOn(validatorStub, 'validate')
+
+      const httpRequest = makeFakeRequest()
+      await createRepostController.handle(httpRequest)
+
+      expect(validateSpy).toHaveBeenCalledWith(httpRequest)
+    })
+
     it('should call CreateRepostUseCase with correct values', async () => {
       const { createRepostController, createRepostUseCaseStub } = makeSut()
       const executeSpy = jest.spyOn(createRepostUseCaseStub, 'execute')
