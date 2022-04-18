@@ -1,5 +1,6 @@
 import { UserNotFoundError } from '../../../../../../src/domain/errors'
 import { UnfollowUserInput, UnfollowUserUseCase } from '../../../../../../src/domain/use-cases/user/unfollow-user-use-case'
+import { Validator } from '../../../../../../src/interfaces/http/contracts'
 import { UnfollowUserController } from '../../../../../../src/interfaces/http/controllers/user/unfollow-user-controller'
 import { noContent, error } from '../../../../../../src/interfaces/http/helpers/http-response-builder'
 
@@ -7,6 +8,16 @@ const makeFakeRequest = () => ({
   headers: { 'user-id': 'any_user_id' },
   params: { userId: 'any_target_user_id' }
 })
+
+const makeValidator = (): Validator => {
+  class ValidatorStub implements Validator {
+    validate (_input: any): void {
+      // do nothing
+    }
+  }
+
+  return new ValidatorStub()
+}
 
 const makeUnfollowUserUseCase = (): UnfollowUserUseCase => {
   class UnfollowUserUseCaseStub implements UnfollowUserUseCase {
@@ -20,22 +31,35 @@ const makeUnfollowUserUseCase = (): UnfollowUserUseCase => {
 
 interface SutTypes {
   unfollowUserController: UnfollowUserController
+  validatorStub: Validator
   unfollowUserUseCaseStub: UnfollowUserUseCase
 }
 
 const makeSut = (): SutTypes => {
+  const validatorStub = makeValidator()
   const unfollowUserUseCaseStub = makeUnfollowUserUseCase()
 
-  const unfollowUserController = new UnfollowUserController(unfollowUserUseCaseStub)
+  const unfollowUserController = new UnfollowUserController(validatorStub, unfollowUserUseCaseStub)
 
   return {
     unfollowUserController,
+    validatorStub,
     unfollowUserUseCaseStub
   }
 }
 
 describe('UnfollowUserController', () => {
   describe('#handle', () => {
+    it('should call Validator with correct values', async () => {
+      const { unfollowUserController, validatorStub } = makeSut()
+      const validateSpy = jest.spyOn(validatorStub, 'validate')
+
+      const httpRequest = makeFakeRequest()
+      await unfollowUserController.handle(httpRequest)
+
+      expect(validateSpy).toHaveBeenCalledWith(httpRequest)
+    })
+
     it('should call UnfollowUserUseCase with correct values', async () => {
       const { unfollowUserController, unfollowUserUseCaseStub } = makeSut()
       const executeSpy = jest.spyOn(unfollowUserUseCaseStub, 'execute')
