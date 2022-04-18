@@ -4,6 +4,7 @@ import { ErrorType } from '../../../../../../src/domain/enums/error-type'
 import { FromOption } from '../../../../../../src/domain/enums/from-option'
 import { CustomError } from '../../../../../../src/domain/errors/custom/custom-error'
 import { LoadPostsInput, LoadPostsUseCase } from '../../../../../../src/domain/use-cases/post/load-posts-use-case'
+import { Validator } from '../../../../../../src/interfaces/http/contracts'
 import { LoadPostsController } from '../../../../../../src/interfaces/http/controllers/post/load-posts-controller'
 import { error, ok } from '../../../../../../src/interfaces/http/helpers/http-response-builder'
 import { generateRegularPostInput } from '../../../../../support/models'
@@ -14,6 +15,16 @@ const makeFakeRequest = () => ({
   headers: { 'user-id': 'any_user_id' },
   query: { from: FromOption.ALL }
 })
+
+const makeValidator = (): Validator => {
+  class ValidatorStub implements Validator {
+    validate (_input: any): void {
+      // do nothing
+    }
+  }
+
+  return new ValidatorStub()
+}
 
 const makeLoadPostsUseCase = (): LoadPostsUseCase => {
   class LoadPostsUseCaseStub implements LoadPostsUseCase {
@@ -27,22 +38,35 @@ const makeLoadPostsUseCase = (): LoadPostsUseCase => {
 
 interface SutTypes {
   loadPostsController: LoadPostsController
+  validatorStub: Validator
   loadPostsUseCaseStub: LoadPostsUseCase
 }
 
 const makeSut = (): SutTypes => {
+  const validatorStub = makeValidator()
   const loadPostsUseCaseStub = makeLoadPostsUseCase()
 
-  const loadPostsController = new LoadPostsController(loadPostsUseCaseStub)
+  const loadPostsController = new LoadPostsController(validatorStub, loadPostsUseCaseStub)
 
   return {
     loadPostsController,
+    validatorStub,
     loadPostsUseCaseStub
   }
 }
 
 describe('LoadPostsController', () => {
   describe('#handle', () => {
+    it('should call Validator with correct values', async () => {
+      const { loadPostsController, validatorStub } = makeSut()
+      const validateSpy = jest.spyOn(validatorStub, 'validate')
+
+      const httpRequest = makeFakeRequest()
+      await loadPostsController.handle(httpRequest)
+
+      expect(validateSpy).toHaveBeenCalledWith(httpRequest)
+    })
+
     it('should call LoadPostsUseCase with correct values', async () => {
       const { loadPostsController, loadPostsUseCaseStub } = makeSut()
       const executeSpy = jest.spyOn(loadPostsUseCaseStub, 'execute')
