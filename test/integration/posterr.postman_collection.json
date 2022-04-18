@@ -16,7 +16,10 @@
 							"script": {
 								"exec": [
 									"const response = pm.response.json();\r",
-									"pm.environment.set('postId', response.postId);\r",
+									"\r",
+									"if (response.postId) {\r",
+									"    pm.environment.set('postId', response.postId);\r",
+									"}\r",
 									"\r",
 									"pm.test(\"should return 201\", () => {\r",
 									"    pm.response.to.have.status(201);\r",
@@ -67,7 +70,10 @@
 							"script": {
 								"exec": [
 									"const response = pm.response.json();\r",
-									"pm.environment.set('postId', response.postId);\r",
+									"\r",
+									"if (response.postId) {\r",
+									"    pm.environment.set('postId', response.postId);\r",
+									"}\r",
 									"\r",
 									"pm.test(\"should return 201\", () => {\r",
 									"    pm.response.to.have.status(201);\r",
@@ -96,7 +102,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/posts/{{postId}}/repost",
+							"raw": "http://localhost:8080/api/posts/:postId/repost",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -105,8 +111,14 @@
 							"path": [
 								"api",
 								"posts",
-								"{{postId}}",
+								":postId",
 								"repost"
+							],
+							"variable": [
+								{
+									"key": "postId",
+									"value": "{{postId}}"
+								}
 							]
 						}
 					},
