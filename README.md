@@ -35,6 +35,7 @@ Access on http://localhost:8080/api
 ## Test
 
 ```
+npm i
 npm run test:unit
 npm run test:integration
 ```
