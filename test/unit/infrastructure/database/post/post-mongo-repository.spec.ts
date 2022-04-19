@@ -15,7 +15,7 @@ const fakeRepostEntity = new Repost(fakeRepostRecord)
 jest.mock('../../../../../src/infrastructure/database/mongo/post/post-mongo-schema', () => ({
   create: (entity: Post) => (entity instanceof RegularPost) ? fakeRegularPostRecord : fakeRepostRecord,
   findOne: () => fakeRegularPostRecord,
-  find: () => ({ sort: () => ({ limit: () => [fakeRegularPostRecord] }) }),
+  find: () => ({ sort: () => [fakeRegularPostRecord] }),
   countDocuments: () => 0
 }))
 

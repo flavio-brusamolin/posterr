@@ -29,7 +29,7 @@ export class PostMongoRepository implements CreateRegularPostRepository, CreateR
 
   async loadPosts (userIds?: string[]): Promise<Post[]> {
     const query = userIds ? { userId: { $in: userIds } } : {}
-    const postRecords = await PostMongoSchema.find(query).sort('-createdAt').limit(10)
+    const postRecords = await PostMongoSchema.find(query).sort('-createdAt')
     return postRecords.map(PostMongoMapper.toDomainEntity)
   }
 
